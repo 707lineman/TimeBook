@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TimeBook</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Calibri, sans-serif;
+      background: linear-gradient(to bottom, #001f3f, #ffffff);
+      color: white;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .sidebar {
+      width: 250px;
+      background: #001f3f;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 20px;
+    }
+    .nav-menu {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      align-items: center;
+      gap: 10px;
+      margin-top: 60px;
+    }
+    .nav-menu a {
+      width: 80%;
+      padding: 10px;
+      text-align: center;
+      color: white;
+      text-decoration: none;
+      background: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .nav-menu a:hover {
+      background: #003366;
+    }
+    .main-content {
+      flex: 1;
+      padding: 30px;
+      overflow-y: auto;
+    }
+    .footer {
+      text-align: center;
+      padding: 10px;
+      background: #001f3f;
+      color: white;
+      position: fixed;
+      bottom: 0;
+      left: 250px;
+      right: 0;
+    }
+    .login-modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      color: black;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+      width: 300px;
+      display: none;
+      z-index: 9999;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="nav-menu" id="nav-menu">
+      <a href="#" onclick="event.preventDefault(); showPage('home')">Dashboard</a>
+      <a href="#" onclick="event.preventDefault(); showPage('timesheet')">Timesheet Management</a>
+      <a href="#" onclick="event.preventDefault(); showPage('workorders')">WO Management</a>
+      <a href="#" onclick="event.preventDefault(); showPage('fileDownload')">File Download</a>
+      <a href="#" onclick="event.preventDefault(); showPage('employees')">Employees</a>
+      <a href="#" onclick="event.preventDefault(); showPage('reports')">Reports</a>
+      <a href="#" onclick="event.preventDefault(); showPage('settings')">Settings</a>
+      <a href="#" onclick="event.preventDefault(); showPage('admin')">Admin</a>
+      <a href="#" onclick="logoutUser()">Logout</a>
+    </div>
+    <div id="logged-in-footer" style="position: absolute; bottom: 10px; left: 10px; font-size: 12px; color: #ccc;"></div>
+  </div>
+
+  <div class="main-content" id="main-content">
+    <h2>Dashboard</h2>
+    <p>Welcome to TimeBook</p>
+  </div>
+
+  <div class="footer">
+    <marquee behavior="scroll" direction="left" scrollamount="5">1 Day Since the Last Accident</marquee>
+    <div>Powered by Digital AI</div>
+  </div>
+
+  <div id="login-modal" class="login-modal">
+    <h3>Login</h3>
+    <label for="username">Username:</label>
+    <input id="username" type="text" style="width: 100%; padding: 6px; margin-bottom: 10px;" />
+    <label for="password">Password:</label>
+    <input id="password" type="password" style="width: 100%; padding: 6px; margin-bottom: 10px;" />
+    <div style="margin-bottom: 10px;"><input type="checkbox" onclick="togglePasswordVisibility()" /> Show Password</div>
+    <div id="login-error" style="color: red; font-size: 14px; margin-bottom: 10px;"></div>
+    <div style="text-align: right;">
+      <button onclick="loginUser()" style="background-color: #28a745; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer;">Login</button>
+    </div>
+  </div>
+
+  <script>
+    function togglePasswordVisibility() {
+      const pwField = document.getElementById('password');
+      pwField.type = pwField.type === 'password' ? 'text' : 'password';
+    }
+
+    function showLoginModal() {
+      document.getElementById('login-modal').style.display = 'block';
+    }
+
+    function hideLoginModal() {
+      document.getElementById('login-modal').style.display = 'none';
+    }
+
+    function loginUser() {
+      const user = document.getElementById('username').value;
+      const pw = document.getElementById('password').value;
+      if (user === 'admin' && pw === 'admin') {
+        hideLoginModal();
+        document.getElementById('nav-menu').style.pointerEvents = 'auto';
+        document.getElementById('logged-in-footer').textContent = 'User: admin';
+        showPage('home');
+      } else {
+        document.getElementById('login-error').textContent = 'Invalid login.';
+      }
+    }
+
+    function logoutUser() {
+      showLoginModal();
+      document.getElementById('logged-in-footer').textContent = '';
+      document.getElementById('main-content').innerHTML = '';
+    }
+
+    function showPage(page) {
+      const container = document.getElementById('main-content');
+      container.innerHTML = `<h2>${page.charAt(0).toUpperCase() + page.slice(1)}</h2><p>Page under construction</p>`;
+    }
+
+    window.onload = () => {
+      showLoginModal();
+      document.getElementById('nav-menu').style.pointerEvents = 'none';
+    };
+  </script>
+</body>
+</html>
